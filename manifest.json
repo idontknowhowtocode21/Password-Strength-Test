@@ -1,0 +1,16 @@
+{
+  "short_name": "UIC Strong",
+  "name": "UIC Password Auditor",
+  "icons": [
+    {
+      "src": "https://www.uic.edu/apps/strong-password/images/TSColorLogo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "./",
+  "theme_color": "#001e62"
+}
